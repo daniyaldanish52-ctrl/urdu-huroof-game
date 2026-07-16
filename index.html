@@ -37,7 +37,7 @@ body{
     display: flex;
     gap: 20px;
     width: 100%;
-    max-width: 900px;
+    max-width: 950px;
     align-items: flex-start;
 }
 
@@ -284,7 +284,7 @@ h1, h2, h3{
 
 <!-- Login/Signup Screen -->
 <div class="auth-container" id="authScreen">
-    <h1 id="welcomeTitle">🎈 خوش آمدید!</h1>
+    <h1>🎈 خوش آمدید!</h1>
     
     <div class="auth-tabs">
         <span class="auth-tab active" id="tabSignup" onclick="switchTab('signup')">نیا اکاؤنٹ (Signup)</span>
@@ -328,10 +328,10 @@ h1, h2, h3{
     </div>
 </div>
 
-<!-- Game Layout Screen (Includes Leaderboard on left and Game on right) -->
+<!-- Game Layout Screen (Leaderboard + Game) -->
 <div class="game-layout" id="gameLayoutScreen" style="display: none;">
     
-    <!-- Leaderboard (Left Side) -->
+    <!-- Leaderboard -->
     <div class="leaderboard">
         <h3>🏆 لیڈر بورڈ (سب سے تیز بچے)</h3>
         <table class="lb-table">
@@ -343,13 +343,11 @@ h1, h2, h3{
                     <th>وقت</th>
                 </tr>
             </thead>
-            <tbody id="leaderboardBody">
-                <!-- Dummy & Real Data will be inserted here -->
-            </tbody>
+            <tbody id="leaderboardBody"></tbody>
         </table>
     </div>
 
-    <!-- Main Game (Right Side) -->
+    <!-- Main Game -->
     <div class="game" id="gameScreen">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>🐘 اردو حروف پہچانو</h1>
@@ -384,13 +382,33 @@ h1, h2, h3{
 
 <script>
 
+// الف سے لے کر ی تک کے تمام سوالات کی واپسی!
 const questions = [
 {letter:"ا", correct:"🍎 انار", options:["🍎 انار","🐱 بلی","🚗 گاڑی"]},
 {letter:"ب", correct:"🐱 بلی", options:["🐱 بلی","🍋 لیموں","✈️ جہاز"]},
 {letter:"پ", correct:"🪁 پتنگ", options:["🪁 پتنگ","🐘 ہاتھی","📘 کتاب"]},
 {letter:"ت", correct:"🍉 تربوز", options:["🍉 تربوز","🐟 مچھلی","🚲 سائیکل"]},
-{letter:"ج", correct:"✈️ جہاز", options:["✈️ جہاز","🍎 انار","🐱 بلی"]}
-// سوالات کو چھوٹا رکھا گیا ہے ٹیسٹنگ کے لیے، آپ اپنے پرانے باقی سوالات یہاں واپس ڈال سکتے ہیں
+{letter:"ج", correct:"✈️ جہاز", options:["✈️ جہاز","🍎 انار","🐱 بلی"]},
+{letter:"چ", correct:"🐦 چڑیا", options:["🐦 چڑیا","📘 کتاب","🍋 لیموں"]},
+{letter:"خ", correct:"🐰 خرگوش", options:["🐰 خرگوش","🚗 گاڑی","🐘 ہاتھی"]},
+{letter:"د", correct:"🌳 درخت", options:["🌳 درخت","🐱 بلی","🍉 تربوز"]},
+{letter:"ر", correct:"📻 ریڈیو", options:["📻 ریڈیو","✈️ جہاز","🐟 مچھلی"]},
+{letter:"ز", correct:"🦒 زرافہ", options:["🦒 زرافہ","🍎 انار","📘 کتاب"]},
+{letter:"س", correct:"🍎 سیب", options:["🍎 سیب","🚗 گاڑی","🐘 ہاتھی"]},
+{letter:"ش", correct:"🦁 شیر", options:["🦁 شیر","🍋 لیموں","🐱 بلی"]},
+{letter:"ط", correct:"🦜 طوطا", options:["🦜 طوطا","🌳 درخت","📻 ریڈیو"]},
+{letter:"ع", correct:"👓 عینک", options:["👓 عینک","🍉 تربوز","🐰 خرگوش"]},
+{letter:"غ", correct:"🎈 غبارہ", options:["🎈 غبارہ","🐦 چڑیا","🍎 سیب"]},
+{letter:"ف", correct:"🐘 فیل", options:["🐘 فیل","📘 کتاب","🚗 گاڑی"]},
+{letter:"ق", correct:"✏️ قلم", options:["✏️ قلم","🐱 بلی","🍋 لیموں"]},
+{letter:"ک", correct:"📘 کتاب", options:["📘 کتاب","🦁 شیر","🎈 غبارہ"]},
+{letter:"گ", correct:"⚽ گیند", options:["⚽ گیند","✈️ جہاز","🍉 تربوز"]},
+{letter:"ل", correct:"🍋 لیموں", options:["🍋 لیموں","🐘 فیل","📻 ریڈیو"]},
+{letter:"م", correct:"🐟 مچھلی", options:["🐟 مچھلی","🍎 انار","🌳 درخت"]},
+{letter:"ن", correct:"🥥 ناریل", options:["🥥 ناریل","📘 کتاب","🐱 بلی"]},
+{letter:"و", correct:"🌹 ورد", options:["🌹 ورد","🦜 طوطا","🍋 لیموں"]},
+{letter:"ہ", correct:"🐘 ہاتھی", options:["🐘 ہاتھی","🎈 غبارہ","⚽ گیند"]},
+{letter:"ی", correct:"🏅 یکم", options:["🏅 یکم","🐟 مچھلی","📻 ریڈیو"]}
 ];
 
 let current = 0;
@@ -398,17 +416,14 @@ let score = 0;
 let currentUser = null;
 let startTime = null;
 
-// Dummy leaderboard data to make it look active
 let defaultLeaderboard = [
-    {username: "UrduChamp3", gender: "👦 لڑکا", accuracy: "100%", time: "12s"},
-    {username: "KidStar9", gender: "👧 لڑکی", accuracy: "100%", time: "15s"},
-    {username: "Smarty2", gender: "👦 لڑکا", accuracy: "80%", time: "11s"}
+    {username: "UrduChamp3", gender: "👦 لڑکا", accuracy: "100%", time: "38s"},
+    {username: "KidStar9", gender: "👧 لڑکی", accuracy: "96%", time: "45s"},
+    {username: "Smarty2", gender: "👦 لڑکا", accuracy: "88%", time: "52s"}
 ];
 
-// Switch between Signup and Signin tabs
 function switchTab(tab) {
     document.getElementById('signupSuccessAlert').style.display = "none";
-    
     if (tab === 'signup') {
         document.getElementById('tabSignup').classList.add('active');
         document.getElementById('tabSignin').classList.remove('active');
@@ -422,7 +437,6 @@ function switchTab(tab) {
     }
 }
 
-// Generate random friendly username
 function generateRandomUsername() {
     const titles = ["UrduHero", "KidStar", "SuperKid", "UrduChamp", "Smarty"];
     const randomTitle = titles[Math.floor(Math.random() * titles.length)];
@@ -430,7 +444,6 @@ function generateRandomUsername() {
     return randomTitle + randomNumber;
 }
 
-// Register Child
 function handleSignup() {
     const email = document.getElementById('regEmail').value.trim().toLowerCase();
     const dob = document.getElementById('regDob').value;
@@ -471,7 +484,6 @@ function handleSignup() {
     `;
 }
 
-// Handle Manual Login
 function handleSignin() {
     const usernameInput = document.getElementById('loginUsername').value.trim();
     const passInput = document.getElementById('loginPass').value.trim();
@@ -495,7 +507,6 @@ function handleSignin() {
     }
 }
 
-// Forgot Password Feature (Popup)
 function handleForgotPassword() {
     const emailPrompt = prompt("اکاؤنٹ بناتے وقت استعمال کی گئی ای میل (Email) لکھیں:");
     if (!emailPrompt) return;
@@ -505,22 +516,17 @@ function handleForgotPassword() {
 
     if (storedData) {
         const user = JSON.parse(storedData);
-        // Alert Popup box as requested
         alert(`🗝️ اکاؤنٹ مل گیا ہے!\n\n👤 یوزر نیم: ${user.username}\n🔑 پاس ورڈ: ${user.password}`);
     } else {
         alert("معذرت، اس ای میل سے کوئی اکاؤنٹ نہیں ملا! ❌");
     }
 }
 
-// Update and Render Leaderboard
 function renderLeaderboard() {
     const tbody = document.getElementById('leaderboardBody');
     tbody.innerHTML = "";
 
-    // Get dynamic results saved in localStorage if any
     let scores = JSON.parse(localStorage.getItem('game_scores')) || [];
-    
-    // Combine dummy and real scores, sort by accuracy then time
     let combined = [...scores, ...defaultLeaderboard];
     
     combined.sort((a, b) => {
@@ -542,7 +548,6 @@ function renderLeaderboard() {
     });
 }
 
-// Enter Game
 function loginUser(user) {
     currentUser = user;
     document.getElementById('playerName').textContent = user.username;
@@ -553,11 +558,10 @@ function loginUser(user) {
     score = 0;
     document.getElementById("score").textContent = score;
     renderLeaderboard();
-    startTime = new Date(); // Start timing the game
+    startTime = new Date();
     loadQuestion();
 }
 
-// Logout
 function logout() {
     currentUser = null;
     document.getElementById('authScreen').style.display = 'block';
@@ -622,10 +626,9 @@ function nextQuestion(){
 
     if(current >= questions.length){
         let endTime = new Date();
-        let totalTimeTaken = Math.round((endTime - startTime) / 1000); // in seconds
+        let totalTimeTaken = Math.round((endTime - startTime) / 1000);
         let accuracyPercent = Math.round((score / questions.length) * 100) + "%";
 
-        // Save performance to leaderboard storage
         let scores = JSON.parse(localStorage.getItem('game_scores')) || [];
         scores.push({
             username: currentUser.username,
