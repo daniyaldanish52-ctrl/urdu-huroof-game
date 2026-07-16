@@ -22,10 +22,10 @@ body{
     padding:15px;
 }
 
-/* Container setups */
+/* Auth Container */
 .auth-container {
     width:100%;
-    max-width:550px;
+    max-width:450px;
     background:#fff;
     border-radius:20px;
     padding:25px;
@@ -33,21 +33,13 @@ body{
     box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
+/* Layout: Game on Left, Leaderboard on Right */
 .game-layout {
     display: flex;
     gap: 20px;
     width: 100%;
     max-width: 950px;
     align-items: flex-start;
-}
-
-.leaderboard {
-    flex: 1;
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.2);
-    text-align: right;
 }
 
 .game{
@@ -59,58 +51,46 @@ body{
     box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
+.leaderboard {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    text-align: left; /* English alignment for Leaderboard */
+    direction: ltr; /* English direction */
+}
+
 h1, h2, h3{
     color:#333;
     margin-bottom:15px;
 }
 
-/* Tabs for Auth */
-.auth-tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
-}
-
-.auth-tab {
-    padding: 10px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #666;
-    border-bottom: 3px solid transparent;
-}
-
-.auth-tab.active {
-    color: #2196F3;
-    border-bottom-color: #2196F3;
-}
-
 /* Form Styles */
 .form-group {
     margin-bottom: 15px;
-    text-align: right;
+    text-align: center;
 }
 
 .form-group label {
     display: block;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     color: #444;
 }
 
-.form-group input, .form-group select {
+.form-group input {
     width: 100%;
     padding: 12px;
-    font-size: 18px;
+    font-size: 20px;
     border: 2px solid #ddd;
     border-radius: 10px;
     outline: none;
     text-align: center;
 }
 
-.form-group input:focus, .form-group select:focus {
+.form-group input:focus {
     border-color: #2196F3;
 }
 
@@ -131,28 +111,7 @@ h1, h2, h3{
     background: #45a049;
 }
 
-.success-alert {
-    background: #e8f5e9;
-    color: #2e7d32;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    font-size: 16px;
-    display: none;
-    text-align: right;
-    border: 1px solid #c8e6c9;
-}
-
-.forgot-link {
-    display: block;
-    margin-top: 10px;
-    color: #1976d2;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 14px;
-}
-
-/* Leaderboard styles */
+/* Leaderboard styles (English) */
 .lb-table {
     width: 100%;
     border-collapse: collapse;
@@ -177,6 +136,14 @@ h1, h2, h3{
     justify-content:space-between;
     margin-bottom:15px;
     font-weight:bold;
+}
+
+.timer {
+    background: #ffebee;
+    color: #c62828;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 16px;
 }
 
 .progress{
@@ -262,7 +229,7 @@ h1, h2, h3{
 
 @media(max-width:768px){
     .game-layout {
-        flex-direction: column;
+        flex-direction: column-reverse; /* Game remains accessible */
     }
     .leaderboard, .game {
         width: 100%;
@@ -282,76 +249,26 @@ h1, h2, h3{
 </head>
 <body>
 
-<!-- Login/Signup Screen -->
+<!-- Direct Username Input Screen -->
 <div class="auth-container" id="authScreen">
     <h1>🎈 خوش آمدید!</h1>
     
-    <div class="auth-tabs">
-        <span class="auth-tab active" id="tabSignup" onclick="switchTab('signup')">نیا اکاؤنٹ (Signup)</span>
-        <span class="auth-tab" id="tabSignin" onclick="switchTab('signin')">لاگ ان (Sign in)</span>
+    <div class="form-group">
+        <label>Enter Username (English Only):</label>
+        <input type="text" id="usernameInput" placeholder="e.g. Ali786" required>
     </div>
-
-    <!-- Signup Form -->
-    <div id="signupForm">
-        <div class="form-group">
-            <label>والدین کی ای میل (Email):</label>
-            <input type="email" id="regEmail" placeholder="example@mail.com" required>
-        </div>
-        <div class="form-group">
-            <label>بچے کی جنس (Gender):</label>
-            <select id="regGender">
-                <option value="👦 لڑکا">👦 لڑکا</option>
-                <option value="👧 لڑکی">👧 لڑکی</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>بچے کی تاریخِ پیدائش (DOB):</label>
-            <input type="date" id="regDob" required>
-        </div>
-        <button class="btn-submit" onclick="handleSignup()">اکاؤنٹ بنائیں 🚀</button>
-        <div class="success-alert" id="signupSuccessAlert"></div>
-    </div>
-
-    <!-- Signin Form -->
-    <div id="signinForm" style="display: none;">
-        <div class="form-group">
-            <label>بچے کا یوزر نیم (Username):</label>
-            <input type="text" id="loginUsername" placeholder="مثال: UrduHero7">
-        </div>
-        <div class="form-group">
-            <label>پاس ورڈ (Password):</label>
-            <input type="password" id="loginPass" placeholder="اپنا پاس ورڈ لکھیں">
-        </div>
-        <button class="btn-submit" onclick="handleSignin()">کھیل میں داخل ہوں 🎮</button>
-        
-        <span class="forgot-link" onclick="handleForgotPassword()">پاس ورڈ بھول گئے؟ 🔑</span>
-    </div>
+    <button class="btn-submit" onclick="startGame()">Start Game 🚀</button>
 </div>
 
-<!-- Game Layout Screen (Leaderboard + Game) -->
+<!-- Game Layout (Game on Left, Leaderboard on Right) -->
 <div class="game-layout" id="gameLayoutScreen" style="display: none;">
     
-    <!-- Leaderboard -->
-    <div class="leaderboard">
-        <h3>🏆 لیڈر بورڈ (سب سے تیز بچے)</h3>
-        <table class="lb-table">
-            <thead>
-                <tr>
-                    <th>نام</th>
-                    <th>جنس</th>
-                    <th>درستی</th>
-                    <th>وقت</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboardBody"></tbody>
-        </table>
-    </div>
-
-    <!-- Main Game -->
+    <!-- Main Game (Left Side) -->
     <div class="game" id="gameScreen">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>🐘 اردو حروف پہچانو</h1>
-            <button class="logoutBtn" onclick="logout()">باہر نکلیں 🚪</button>
+            <div class="timer" id="gameTimer">Time: 10:00</div>
+            <button class="logoutBtn" onclick="exitGame()">Exit 🚪</button>
         </div>
 
         <div class="top">
@@ -378,11 +295,26 @@ h1, h2, h3{
         اگلا سوال ➡️
         </button>
     </div>
+
+    <!-- Leaderboard (Right Side - English Only) -->
+    <div class="leaderboard">
+        <h3 style="text-align: center;">🏆 Leaderboard</h3>
+        <table class="lb-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Accuracy</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
 
-// الف سے لے کر ی تک کے تمام سوالات کی واپسی!
 const questions = [
 {letter:"ا", correct:"🍎 انار", options:["🍎 انار","🐱 بلی","🚗 گاڑی"]},
 {letter:"ب", correct:"🐱 بلی", options:["🐱 بلی","🍋 لیموں","✈️ جہاز"]},
@@ -413,115 +345,87 @@ const questions = [
 
 let current = 0;
 let score = 0;
-let currentUser = null;
+let currentUser = "";
 let startTime = null;
+let timerInterval = null;
+const TIME_LIMIT = 600; // 10 Minutes in seconds (600)
+let timeLeft = TIME_LIMIT;
 
+// English default leaderboard data
 let defaultLeaderboard = [
-    {username: "UrduChamp3", gender: "👦 لڑکا", accuracy: "100%", time: "38s"},
-    {username: "KidStar9", gender: "👧 لڑکی", accuracy: "96%", time: "45s"},
-    {username: "Smarty2", gender: "👦 لڑکا", accuracy: "88%", time: "52s"}
+    {username: "UrduChamp3", accuracy: "100%", time: "38s"},
+    {username: "KidStar9", accuracy: "96%", time: "45s"},
+    {username: "Smarty2", accuracy: "88%", time: "52s"}
 ];
 
-function switchTab(tab) {
-    document.getElementById('signupSuccessAlert').style.display = "none";
-    if (tab === 'signup') {
-        document.getElementById('tabSignup').classList.add('active');
-        document.getElementById('tabSignin').classList.remove('active');
-        document.getElementById('signupForm').style.display = 'block';
-        document.getElementById('signinForm').style.display = 'none';
-    } else {
-        document.getElementById('tabSignup').classList.remove('active');
-        document.getElementById('tabSignin').classList.add('active');
-        document.getElementById('signupForm').style.display = 'none';
-        document.getElementById('signinForm').style.display = 'block';
-    }
-}
-
-function generateRandomUsername() {
-    const titles = ["UrduHero", "KidStar", "SuperKid", "UrduChamp", "Smarty"];
-    const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-    const randomNumber = Math.floor(Math.random() * 10) + 1;
-    return randomTitle + randomNumber;
-}
-
-function handleSignup() {
-    const email = document.getElementById('regEmail').value.trim().toLowerCase();
-    const dob = document.getElementById('regDob').value;
-    const gender = document.getElementById('regGender').value;
-
-    if (!email || !dob) {
-        alert("براہ کرم ای میل اور تاریخِ پیدائش درج کریں! 😊");
-        return;
-    }
-
-    if(localStorage.getItem('email_' + email)) {
-        alert("یہ ای میل پہلے سے رجسٹرڈ ہے۔ براہ کرم لاگ ان کریں! 😊");
-        switchTab('signin');
-        return;
-    }
-
-    const generatedUsername = generateRandomUsername();
-    const easyPassword = "urdu123";
+// Check and Save Unique Username
+function startGame() {
+    const username = document.getElementById('usernameInput').value.trim();
     
-    const userData = {
-        email: email,
-        dob: dob,
-        gender: gender,
-        username: generatedUsername,
-        password: easyPassword
-    };
+    // Validate English Username only
+    const englishRegex = /^[A-Za-z0-9_]+$/;
 
-    localStorage.setItem('email_' + email, JSON.stringify(userData));
-    localStorage.setItem('user_' + generatedUsername.toLowerCase(), JSON.stringify(userData));
-
-    const alertBox = document.getElementById('signupSuccessAlert');
-    alertBox.style.display = "block";
-    alertBox.innerHTML = `
-        🎉 <b>اکاؤنٹ بن گیا ہے!</b><br><br>
-        🔑 یوزر نیم: <b style="color:#1976d2; font-size: 20px;">${generatedUsername}</b><br>
-        🔒 پاس ورڈ: <b style="color:#2e7d32; font-size: 20px;">${easyPassword}</b><br><br>
-        اب اوپر <b>"لاگ ان (Sign in)"</b> بٹن پر کلک کریں اور گیم شروع کریں!
-    `;
-}
-
-function handleSignin() {
-    const usernameInput = document.getElementById('loginUsername').value.trim();
-    const passInput = document.getElementById('loginPass').value.trim();
-
-    if (!usernameInput || !passInput) {
-        alert("براہ کرم یوزر نیم اور پاس ورڈ لکھیں! 🔑");
+    if (!username) {
+        alert("Please enter a username! 😊");
         return;
     }
 
-    const storedData = localStorage.getItem('user_' + usernameInput.toLowerCase());
+    if (!englishRegex.test(username)) {
+        alert("Please use English letters and numbers only! (e.g. Ali12)");
+        return;
+    }
 
-    if (storedData) {
-        const user = JSON.parse(storedData);
-        if (user.password === passInput) {
-            loginUser(user);
-        } else {
-            alert("غلط پاس ورڈ! دوبارہ کوشش کریں ❌");
+    // Check uniqueness in LocalStorage
+    let existingScores = JSON.parse(localStorage.getItem('game_scores')) || [];
+    let isTaken = existingScores.some(score => score.username.toLowerCase() === username.toLowerCase());
+
+    if (isTaken) {
+        alert("This username is already taken! Please choose another cute name. 👦👧");
+        return;
+    }
+
+    currentUser = username;
+    document.getElementById('playerName').textContent = username;
+    
+    // Switch Screens
+    document.getElementById('authScreen').style.display = 'none';
+    document.getElementById('gameLayoutScreen').style.display = 'flex';
+    
+    // Init Game Settings
+    current = 0;
+    score = 0;
+    timeLeft = TIME_LIMIT;
+    document.getElementById("score").textContent = score;
+    renderLeaderboard();
+    startTime = new Date();
+    
+    // Start 10-Min Timer
+    startTimer();
+    loadQuestion();
+}
+
+// 10-Minute Countdown Timer
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        
+        // Formatting seconds with leading zero
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        document.getElementById('gameTimer').textContent = `Time: ${minutes}:${seconds}`;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("⏰ Time Over! Try again and be faster next time!");
+            exitGame();
         }
-    } else {
-        alert("یہ یوزر نیم درست نہیں ہے! دوبارہ چیک کریں۔ 😊");
-    }
+    }, 1000);
 }
 
-function handleForgotPassword() {
-    const emailPrompt = prompt("اکاؤنٹ بناتے وقت استعمال کی گئی ای میل (Email) لکھیں:");
-    if (!emailPrompt) return;
-
-    const emailClean = emailPrompt.trim().toLowerCase();
-    const storedData = localStorage.getItem('email_' + emailClean);
-
-    if (storedData) {
-        const user = JSON.parse(storedData);
-        alert(`🗝️ اکاؤنٹ مل گیا ہے!\n\n👤 یوزر نیم: ${user.username}\n🔑 پاس ورڈ: ${user.password}`);
-    } else {
-        alert("معذرت، اس ای میل سے کوئی اکاؤنٹ نہیں ملا! ❌");
-    }
-}
-
+// Render Leaderboard (English Only)
 function renderLeaderboard() {
     const tbody = document.getElementById('leaderboardBody');
     tbody.innerHTML = "";
@@ -529,6 +433,7 @@ function renderLeaderboard() {
     let scores = JSON.parse(localStorage.getItem('game_scores')) || [];
     let combined = [...scores, ...defaultLeaderboard];
     
+    // Sort by accuracy (highest first) and then time (lowest first)
     combined.sort((a, b) => {
         let accA = parseInt(a.accuracy);
         let accB = parseInt(b.accuracy);
@@ -536,42 +441,16 @@ function renderLeaderboard() {
         return parseInt(a.time) - parseInt(b.time);
     });
 
-    combined.slice(0, 5).forEach(player => {
+    combined.slice(0, 5).forEach((player, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
+            <td>#${index + 1}</td>
             <td><b>${player.username}</b></td>
-            <td>${player.gender || '👦 لڑکا'}</td>
             <td style="color:green; font-weight:bold;">${player.accuracy}</td>
             <td style="color:#1976d2;">${player.time}</td>
         `;
         tbody.appendChild(row);
     });
-}
-
-function loginUser(user) {
-    currentUser = user;
-    document.getElementById('playerName').textContent = user.username;
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('gameLayoutScreen').style.display = 'flex';
-    
-    current = 0;
-    score = 0;
-    document.getElementById("score").textContent = score;
-    renderLeaderboard();
-    startTime = new Date();
-    loadQuestion();
-}
-
-function logout() {
-    currentUser = null;
-    document.getElementById('authScreen').style.display = 'block';
-    document.getElementById('gameLayoutScreen').style.display = 'none';
-    
-    document.getElementById('regEmail').value = "";
-    document.getElementById('regDob').value = "";
-    document.getElementById('loginUsername').value = "";
-    document.getElementById('loginPass').value = "";
-    document.getElementById('signupSuccessAlert').style.display = "none";
 }
 
 function shuffle(arr){
@@ -625,14 +504,16 @@ function nextQuestion(){
     current++;
 
     if(current >= questions.length){
+        clearInterval(timerInterval);
+        
         let endTime = new Date();
         let totalTimeTaken = Math.round((endTime - startTime) / 1000);
         let accuracyPercent = Math.round((score / questions.length) * 100) + "%";
 
+        // Save performance to leaderboard storage
         let scores = JSON.parse(localStorage.getItem('game_scores')) || [];
         scores.push({
-            username: currentUser.username,
-            gender: currentUser.gender,
+            username: currentUser,
             accuracy: accuracyPercent,
             time: totalTimeTaken + "s"
         });
@@ -643,14 +524,14 @@ function nextQuestion(){
         document.getElementById("gameScreen").innerHTML = `
         <h1>🏆 کھیل مکمل</h1>
         <br>
-        <h2>شاباش ${currentUser.username}! آپ کا اسکور ${score} / ${questions.length} ہے! 🎉</h2>
-        <p>آپ نے یہ گیم ${totalTimeTaken} سیکنڈز میں مکمل کی!</p>
+        <h2>Well done, ${currentUser}! Your score is ${score} / ${questions.length}! 🎉</h2>
+        <p>You completed the game in ${totalTimeTaken} seconds!</p>
         <br><br>
         <button class="restartBtn" onclick="restartGame()">
-        🔄 دوبارہ کھیلیں
+        🔄 Play Again
         </button>
-        <button class="logoutBtn" style="display:block; margin: 15px auto;" onclick="location.reload()">
-        🚪 لاگ آؤٹ کریں
+        <button class="logoutBtn" style="display:block; margin: 15px auto;" onclick="exitGame()">
+        🚪 Main Menu
         </button>
         `;
         return;
@@ -659,9 +540,20 @@ function nextQuestion(){
     loadQuestion();
 }
 
+function exitGame() {
+    clearInterval(timerInterval);
+    currentUser = "";
+    document.getElementById('usernameInput').value = "";
+    document.getElementById('authScreen').style.display = 'block';
+    document.getElementById('gameLayoutScreen').style.display = 'none';
+}
+
 function restartGame(){
     location.reload();
 }
+
+// Render Leaderboard on Load to keep it updated
+renderLeaderboard();
 
 </script>
 
