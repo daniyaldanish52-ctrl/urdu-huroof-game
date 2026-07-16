@@ -1,0 +1,297 @@
+```html
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اردو حروف پہچانو</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#6dd5ed,#2193b0);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+}
+
+.game{
+    width:100%;
+    max-width:550px;
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+h1{
+    color:#333;
+    margin-bottom:15px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+    font-weight:bold;
+}
+
+.progress{
+    width:100%;
+    height:12px;
+    background:#eee;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:#4CAF50;
+    transition:.3s;
+}
+
+.letter{
+    font-size:90px;
+    color:#1976d2;
+    margin:15px 0;
+    font-weight:bold;
+}
+
+.question{
+    font-size:22px;
+    margin-bottom:15px;
+}
+
+.options{
+    display:grid;
+    gap:10px;
+}
+
+.option{
+    border:none;
+    padding:15px;
+    font-size:24px;
+    border-radius:12px;
+    background:#f3f3f3;
+    cursor:pointer;
+}
+
+.option:hover{
+    background:#e6e6e6;
+}
+
+.message{
+    min-height:40px;
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.nextBtn,
+.restartBtn{
+    margin-top:15px;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    color:white;
+    font-size:18px;
+}
+
+.nextBtn{
+    background:#4CAF50;
+    display:none;
+}
+
+.restartBtn{
+    background:#2196F3;
+}
+
+@media(max-width:480px){
+    .letter{
+        font-size:70px;
+    }
+
+    .option{
+        font-size:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="game">
+
+<h1>🐘 اردو حروف پہچانو</h1>
+
+<div class="top">
+    <div>⭐ اسکور: <span id="score">0</span></div>
+    <div>سوال: <span id="qNo">1</span></div>
+</div>
+
+<div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<div class="question">
+اس حرف سے شروع ہونے والا لفظ منتخب کریں
+</div>
+
+<div class="letter" id="letter"></div>
+
+<div class="options" id="options"></div>
+
+<div class="message" id="message"></div>
+
+<button class="nextBtn" id="nextBtn" onclick="nextQuestion()">
+اگلا سوال ➡️
+</button>
+
+</div>
+
+<script>
+
+const questions = [
+
+{letter:"ا", correct:"🍎 انار", options:["🍎 انار","🐱 بلی","🚗 گاڑی"]},
+{letter:"ب", correct:"🐱 بلی", options:["🐱 بلی","🍋 لیموں","✈️ جہاز"]},
+{letter:"پ", correct:"🪁 پتنگ", options:["🪁 پتنگ","🐘 ہاتھی","📘 کتاب"]},
+{letter:"ت", correct:"🍉 تربوز", options:["🍉 تربوز","🐟 مچھلی","🚲 سائیکل"]},
+{letter:"ج", correct:"✈️ جہاز", options:["✈️ جہاز","🍎 انار","🐱 بلی"]},
+{letter:"چ", correct:"🐦 چڑیا", options:["🐦 چڑیا","📘 کتاب","🍋 لیموں"]},
+{letter:"خ", correct:"🐰 خرگوش", options:["🐰 خرگوش","🚗 گاڑی","🐘 ہاتھی"]},
+{letter:"د", correct:"🌳 درخت", options:["🌳 درخت","🐱 بلی","🍉 تربوز"]},
+{letter:"ر", correct:"📻 ریڈیو", options:["📻 ریڈیو","✈️ جہاز","🐟 مچھلی"]},
+{letter:"ز", correct:"🦒 زرافہ", options:["🦒 زرافہ","🍎 انار","📘 کتاب"]},
+{letter:"س", correct:"🍎 سیب", options:["🍎 سیب","🚗 گاڑی","🐘 ہاتھی"]},
+{letter:"ش", correct:"🦁 شیر", options:["🦁 شیر","🍋 لیموں","🐱 بلی"]},
+{letter:"ط", correct:"🦜 طوطا", options:["🦜 طوطا","🌳 درخت","📻 ریڈیو"]},
+{letter:"ع", correct:"👓 عینک", options:["👓 عینک","🍉 تربوز","🐰 خرگوش"]},
+{letter:"غ", correct:"🎈 غبارہ", options:["🎈 غبارہ","🐦 چڑیا","🍎 سیب"]},
+{letter:"ف", correct:"🐘 فیل", options:["🐘 فیل","📘 کتاب","🚗 گاڑی"]},
+{letter:"ق", correct:"✏️ قلم", options:["✏️ قلم","🐱 بلی","🍋 لیموں"]},
+{letter:"ک", correct:"📘 کتاب", options:["📘 کتاب","🦁 شیر","🎈 غبارہ"]},
+{letter:"گ", correct:"⚽ گیند", options:["⚽ گیند","✈️ جہاز","🍉 تربوز"]},
+{letter:"ل", correct:"🍋 لیموں", options:["🍋 لیموں","🐘 فیل","📻 ریڈیو"]},
+{letter:"م", correct:"🐟 مچھلی", options:["🐟 مچھلی","🍎 انار","🌳 درخت"]},
+{letter:"ن", correct:"🥥 ناریل", options:["🥥 ناریل","📘 کتاب","🐱 بلی"]},
+{letter:"و", correct:"🌹 ورد", options:["🌹 ورد","🦜 طوطا","🍋 لیموں"]},
+{letter:"ہ", correct:"🐘 ہاتھی", options:["🐘 ہاتھی","🎈 غبارہ","⚽ گیند"]},
+{letter:"ی", correct:"🏅 یکم", options:["🏅 یکم","🐟 مچھلی","📻 ریڈیو"]}
+];
+
+let current = 0;
+let score = 0;
+
+function shuffle(arr){
+    return arr.sort(() => Math.random() - 0.5);
+}
+
+function loadQuestion(){
+
+    const q = questions[current];
+
+    document.getElementById("letter").textContent = q.letter;
+    document.getElementById("qNo").textContent = current + 1;
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    shuffle([...q.options]).forEach(option => {
+
+        const btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = option;
+
+        btn.onclick = () => checkAnswer(option);
+
+        optionsDiv.appendChild(btn);
+    });
+
+    document.getElementById("message").textContent = "";
+    document.getElementById("nextBtn").style.display = "none";
+
+    const progress =
+      ((current) / questions.length) * 100;
+
+    document.getElementById("progressBar").style.width =
+      progress + "%";
+}
+
+function checkAnswer(selected){
+
+    const q = questions[current];
+
+    document.querySelectorAll(".option")
+      .forEach(btn => btn.disabled = true);
+
+    if(selected === q.correct){
+
+        score++;
+        document.getElementById("score").textContent = score;
+
+        document.getElementById("message").innerHTML =
+          "🎉 شاباش! درست جواب";
+
+        document.getElementById("message").style.color =
+          "green";
+
+    }else{
+
+        document.getElementById("message").innerHTML =
+          "❌ غلط جواب<br>✔️ درست جواب: " + q.correct;
+
+        document.getElementById("message").style.color =
+          "red";
+    }
+
+    document.getElementById("nextBtn").style.display =
+      "inline-block";
+}
+
+function nextQuestion(){
+
+    current++;
+
+    if(current >= questions.length){
+
+        document.querySelector(".game").innerHTML = `
+        <h1>🏆 کھیل مکمل</h1>
+        <br>
+        <h2>آپ کا اسکور ${score} / ${questions.length}</h2>
+        <br><br>
+        <button class="restartBtn" onclick="restartGame()">
+        🔄 دوبارہ کھیلیں
+        </button>
+        `;
+
+        return;
+    }
+
+    loadQuestion();
+}
+
+function restartGame(){
+    current = 0;
+    score = 0;
+    location.reload();
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
+```
